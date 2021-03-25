@@ -24,6 +24,9 @@ class AgendasController < ApplicationController
 
   def destroy
     @agenda.destroy
+    # @users = Assign.where(team_id: @agenda.team_id).map(&:user)
+    @users = Team.find(@agenda.team_id).members
+    AgendaMailer.send_mail_users(@users)
     redirect_to dashboard_url, notice: I18n.t('views.messages.delete_agenda')
   end
 
