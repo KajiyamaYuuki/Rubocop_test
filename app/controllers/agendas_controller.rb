@@ -1,5 +1,6 @@
 class AgendasController < ApplicationController
   before_action :set_agenda, only: %i[destroy]
+  before_action :ensure_destroyer, only: %i[destroy]
 
   def index
     @agendas = Agenda.all
@@ -34,5 +35,13 @@ class AgendasController < ApplicationController
 
   def agenda_params
     params.fetch(:agenda, {}).permit %i[title description]
+  end
+
+
+  def ensure_destroyer
+    if current_user.id != @agenda[:user_id].to_i && current_user.id != @agenda.team.owner_id
+      flash[:notice] = '権限がありません'
+      redirect_to dashboard_url
+    end
   end
 end
