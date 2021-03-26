@@ -49,7 +49,7 @@ class TeamsController < ApplicationController
 
   def change_owner
     if @team.update(owner_params)
-      TeamMailer.new_owner_notification_mail(@team.owner).deliver
+      TeamMailer.notification_mail(@team.owner).deliver
       redirect_to @team, notice: I18n.t('views.messages.change_owner')
     else
       render @team
