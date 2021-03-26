@@ -54,8 +54,6 @@ class TeamsController < ApplicationController
     else
       render @team
     end
-      # new_owner = Assign.find(params[:user_id])
-      # @team.owner_id = new_owner
   end
 
   private
