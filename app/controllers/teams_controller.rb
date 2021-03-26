@@ -48,12 +48,14 @@ class TeamsController < ApplicationController
   end
 
   def change_owner
-    new_owner = Assign.find(params[:user_id])
-    @team.owner_id = new_owner
-
-    binding.pry
-
-    redirect_to teams_url, notice: I18n.t('views.messages.change_owner')
+    if @team.update(owner_params)
+      TeamMailer.new_owner_notification_mail(@team.owner).deliver
+      redirect_to @team, notice: I18n.t('views.messages.change_owner')
+    else
+      render @team
+    end
+      # new_owner = Assign.find(params[:user_id])
+      # @team.owner_id = new_owner
   end
 
   private
@@ -65,4 +67,9 @@ class TeamsController < ApplicationController
   def team_params
     params.fetch(:team, {}).permit %i[name icon icon_cache owner_id keep_team_id]
   end
+
+  def owner_params
+    params.permit(:owner_id)
+  end
+
 end
