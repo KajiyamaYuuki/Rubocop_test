@@ -40,7 +40,6 @@ class AgendasController < ApplicationController
     params.fetch(:agenda, {}).permit %i[title description]
   end
 
-
   def ensure_destroyer
     if current_user.id != @agenda[:user_id].to_i && current_user.id != @agenda.team.owner_id
       flash[:notice] = '権限がありません'
